@@ -9,10 +9,21 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+
+import {MatExpansionModule} from '@angular/material/expansion';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+  imports: [
+    MatExpansionModule,
+    BrowserModule, 
+    IonicModule.forRoot(), 
+    AppRoutingModule,
+    BrowserAnimationsModule
+  ],
   providers: [
     StatusBar,
     SplashScreen,

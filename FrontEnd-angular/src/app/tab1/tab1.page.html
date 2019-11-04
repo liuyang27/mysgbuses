@@ -17,14 +17,41 @@
     </ion-refresher-content>
   </ion-refresher>
 
+  <mat-accordion>
+    <mat-expansion-panel *ngFor="let busstop of bussStopList" (opened)="getBusInfo(busstop.BusStopCode)" (closed)="clear()">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <b>{{busstop.Description}}</b>
+        </mat-panel-title>
+        <mat-panel-description>
+          <small>{{busstop.RoadName}} {{busstop.BusStopCode}}</small>
+        </mat-panel-description>
+          <!-- <div *ngIf="id==busStopCode" id="{{busstop.BusStopCode}}">
+              {{busesList[0].ServiceNo|json}}
+          </div> -->
+      </mat-expansion-panel-header>
+          
+    </mat-expansion-panel>
+  </mat-accordion>
 
-  <ion-list>
+  <!-- <ion-list>
     <ion-item *ngFor="let busstop of bussStopList">
       <ion-label>{{busstop.Description}}</ion-label>
       <ion-label>{{busstop.RoadName}} ({{busstop.BusStopCode}})</ion-label>
+      <ion-label>
+        <mat-accordion>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{busstop.Description}}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </ion-label>
     </ion-item>
-   
-  </ion-list>
+  </ion-list> -->
 
 </ion-content>
+
 

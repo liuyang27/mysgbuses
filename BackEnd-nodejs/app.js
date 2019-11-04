@@ -8,7 +8,8 @@ var busCtrl = require('./controllers/busCtrl.js')
 
 app.use(cors());
 
-app.get('/',                        busCtrl.getAllBusStops);
+// app.get('/',                        busCtrl.getAllBusStops);
+app.get('/',                        busCtrl.getNearbyBusStops);
 app.get('/test',                    busCtrl.testDistance);
 app.get('/:sid(\\d+)',              busCtrl.getBusStopById);
 app.get('/:sid(\\d+)/:bid(\\d+)',   busCtrl.getBusById);

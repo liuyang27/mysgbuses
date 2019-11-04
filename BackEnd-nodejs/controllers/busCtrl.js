@@ -10,6 +10,7 @@ const geolib = require('geolib');
 const accountkey='ydztgTr0R7GPHnh82Bl89w=='
 
 exports.getAllBusStops = function(req,res){ 
+    console.log("this is funtion: getAllBusStops");
     var numOfRes=0;
     var busStopList=[];
     (function getdata(count){
@@ -40,6 +41,7 @@ exports.getAllBusStops = function(req,res){
 }
 
 exports.getBusStopById = function(req,res){
+    console.log("this is funtion: getBusStopById");
     sid=req.params.sid;
     buslist=[];
     request({
@@ -54,18 +56,19 @@ exports.getBusStopById = function(req,res){
         }   
     }, function(error, response, body) {
         if (!error && response.statusCode == 200) {  
-            //console.log(body['Services']);
-            for(var i=0;i<body['Services'].length;i++){
-                buslist.push(body['Services'][i]['ServiceNo']);
-            }
-            console.log(buslist)
-            res.json(buslist);
+            // for(var i=0;i<body['Services'].length;i++){
+            //     buslist.push(body['Services'][i]['ServiceNo']);
+            // }
+            // console.log(buslist)
+            // res.json(buslist);
+            res.json(body)
 
         }
     });
 }
 
 exports.getBusById = function(req,res){
+    console.log("this is funtion: getBusById");
     sid=req.params.sid;
     bid=req.params.bid;
     request({
@@ -105,12 +108,6 @@ function getDistance(lat1,lon1,lat2,lon2){
     );
 } 
 
-// function getDistance(lat1,lon1,lat2,lon2){
-//     return geolib.getPreciseDistance(
-//         { latitude: 51.5103, longitude: 7.49347 },
-//         { latitude: 52.518611, longitude: 13.408056},
-//     );
-// } 
 
 exports.getNearbyBusStops = function(req,res){ 
     var numOfRes=0;
@@ -143,7 +140,7 @@ exports.getNearbyBusStops = function(req,res){
                         distancelist.push(parseFloat(dis))
                     }
                     bubble_Sort(distancelist,busStopList);
-                    return res.json(busStopList.slice(0,50));
+                    return res.json(busStopList.slice(0,30));
                 }
             }
         });
