@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Nearby Bus stop
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-dropdown"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+
+  <ion-list>
+    <ion-item *ngFor="let busstop of bussStopList">
+      <ion-label>{{busstop.Description}}</ion-label>
+      <ion-label>{{busstop.RoadName}} ({{busstop.BusStopCode}})</ion-label>
+    </ion-item>
+   
+  </ion-list>
+
+</ion-content>
+
