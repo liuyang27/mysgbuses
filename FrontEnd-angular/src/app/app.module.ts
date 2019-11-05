@@ -12,12 +12,13 @@ import { AppComponent } from './app.component';
 
 import {MatExpansionModule} from '@angular/material/expansion';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { FavouritemodalPageModule } from './favouritemodal/favouritemodal.module';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
+    FavouritemodalPageModule,
     MatExpansionModule,
     BrowserModule, 
     IonicModule.forRoot(), 

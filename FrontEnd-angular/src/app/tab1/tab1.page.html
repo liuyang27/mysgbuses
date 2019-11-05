@@ -1,8 +1,7 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>
-      Nearby Bus stop
-    </ion-title>
+    <ion-title>Nearby Bus Stops</ion-title>
+    <ion-icon slot="end" name="star" style="font-size:30px;margin-right: 20px" (click)="createModal()"></ion-icon>
   </ion-toolbar>
 </ion-header>
 
@@ -18,7 +17,7 @@
   </ion-refresher>
 
   <mat-accordion>
-    <mat-expansion-panel *ngFor="let busstop of bussStopList" (opened)="getBusInfo(busstop.BusStopCode)" (closed)="clear()">
+    <mat-expansion-panel *ngFor="let busstop of bussStopList" (opened)="getBusInfo(busstop.BusStopCode)">
       <mat-expansion-panel-header>
         <mat-panel-title>
           <b>{{busstop.Description}}</b>
@@ -26,32 +25,63 @@
         <mat-panel-description>
           <small>{{busstop.RoadName}} {{busstop.BusStopCode}}</small>
         </mat-panel-description>
-          <!-- <div *ngIf="id==busStopCode" id="{{busstop.BusStopCode}}">
-              {{busesList[0].ServiceNo|json}}
-          </div> -->
       </mat-expansion-panel-header>
-          
+
+      <div *ngIf="busstop.BusStopCode==busStopId">
+        <ion-list *ngIf="busesList">
+          <ion-item-sliding *ngFor="let bus of busesList">
+              <ion-item>
+                <table >
+                  <tr>
+                    <td style="width:40px"><b>{{bus.ServiceNo}}</b></td>
+                    <td style="width:80px">           
+                        <ion-chip color="{{getLoadColor(bus.NextBus.Load)}}">
+                          {{getArrival(bus.NextBus.EstimatedArrival)}}
+                        </ion-chip>
+                    </td>
+                    <td style="width:80px">
+                        <ion-chip color="{{getLoadColor(bus.NextBus2.Load)}}">
+                            {{getArrival(bus.NextBus2.EstimatedArrival)}}
+                        </ion-chip>
+                    </td>
+                    <td>
+                        <ion-chip color="{{getLoadColor(bus.NextBus3.Load)}}">
+                            {{getArrival(bus.NextBus3.EstimatedArrival)}}
+                        </ion-chip>
+                    </td>
+                  </tr>
+                </table>
+              </ion-item>
+              <ion-item-options side="end">
+                <ion-item-option (click)="addFav(busstop.BusStopCode,bus.ServiceNo)">Add</ion-item-option>
+              </ion-item-options>
+          </ion-item-sliding>
+        </ion-list>
+      </div>
+
     </mat-expansion-panel>
   </mat-accordion>
 
-  <!-- <ion-list>
-    <ion-item *ngFor="let busstop of bussStopList">
-      <ion-label>{{busstop.Description}}</ion-label>
-      <ion-label>{{busstop.RoadName}} ({{busstop.BusStopCode}})</ion-label>
-      <ion-label>
-        <mat-accordion>
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                {{busstop.Description}}
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-          </mat-expansion-panel>
-        </mat-accordion>
-      </ion-label>
-    </ion-item>
-  </ion-list> -->
-
 </ion-content>
-
+<ion-footer>
+          <ion-icon name="bus" style="font-size:30px;vertical-align:middle;margin-left: 10px;margin-right: 10px"></ion-icon>
+          <ion-chip color="success">
+              <table style="font-size:small;text-align:center">
+                  <tr><td>Seats</td></tr>
+                  <tr><td>Avaliable</td></tr>
+              </table>
+          </ion-chip>
+          <ion-chip color="warning">
+              <table style="font-size:small;text-align:center">
+                  <tr><td>Standing</td></tr>
+                  <tr><td>Avaliable</td></tr>
+              </table>
+          </ion-chip>
+          <ion-chip color="danger">
+              <table style="font-size:small;text-align:center">
+                  <tr><td>Limited</td></tr>
+                  <tr><td>Standing</td></tr>
+              </table>
+          </ion-chip>
+  </ion-footer>
 
