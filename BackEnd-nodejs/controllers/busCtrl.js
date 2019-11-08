@@ -4,7 +4,7 @@ var http=require('https')
 var request = require('request')
 //var geolocation = require('geolocation')
 const geolib = require('geolib');
-
+var formidable =require("formidable");
 
 
 const accountkey='ydztgTr0R7GPHnh82Bl89w=='
@@ -41,7 +41,7 @@ exports.getAllBusStops = function(req,res){
 }
 
 exports.getBusStopById = function(req,res){
-    console.log("this is funtion: getBusStopById");
+    //console.log("this is funtion: getBusStopById");
     sid=req.params.sid;
     buslist=[];
     request({
@@ -165,4 +165,45 @@ function swap(arrlist, first_Index, second_Index){
     var temp = arrlist[first_Index];
     arrlist[first_Index] = arrlist[second_Index];
     arrlist[second_Index] = temp;
+}
+
+exports.getFavouriteBusStops = function(req,res){
+    console.log("this is funtion: getFavouriteBusStops");
+    var data=[];
+    var form = new formidable.IncomingForm();
+    form.parse(req, function(err, fields, files) {
+        var index=0;
+        if(fields.busstopList.length<=0){
+            res.json({"results":"Favourite list is empty"});
+            return;
+        }
+        (function getFavourite(bid){
+                request({
+                    url: "http://datamall2.mytransport.sg/ltaodataservice/BusArrivalv2?BusStopCode="+bid,
+                    method: "GET",
+                    json: true,
+                    headers: {
+                        "Accept":"application/json",
+                        "AccountKey":accountkey,
+                        "Content-Type": "application/json;charset=UTF-8",
+                        "content-language": "en-US"
+                    }   
+                }, function(error, response, body) {
+                    if (!error && response.statusCode == 200) {
+                        data.push(body);
+                        index++;
+
+                        if(index<fields.busstopList.length){
+                            getFavourite(fields.busstopList[index]);
+                        }else{
+                            res.json({"results":data});
+                        }
+                    }
+                });
+            })(fields.busstopList[0]);
+    });
+
+
+
+
 }

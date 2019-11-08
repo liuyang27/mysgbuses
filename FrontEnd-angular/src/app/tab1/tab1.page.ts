@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ModalController } from '@ionic/angular';
 import { FavouritemodalPage } from '../favouritemodal/favouritemodal.page';
 import { StorageService } from '../services/storage.service';
-
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab1',
@@ -13,18 +13,23 @@ import { StorageService } from '../services/storage.service';
 export class Tab1Page implements OnInit{
 
 
-  constructor(private _http:HttpClient,public modalController: ModalController,public storage:StorageService) {}
+  constructor(private _http:HttpClient,
+              public modalController: ModalController,
+              public storage:StorageService,
+              public toastController: ToastController) {}
 
   bussStopList:any;
   busesList:any;
   busStopId:any;
   currentModal:any=null;
   favouriteList:any[]=[];
-  busIdList:any[]=[];
+  
 
 
 
   ngOnInit(): void {
+    this.favouriteList=this.storage.get("favlist");
+    //console.log( this.favouriteList);
     this._http.get("http://localhost:3000").subscribe(
       data => this.bussStopList=data);
   }
@@ -92,55 +97,73 @@ export class Tab1Page implements OnInit{
   }
 
   addFav(busstopId,busId){
-    //this.storage.set("favlist",this.favouriteList);
-    if(!this.favListHaskeyword(this.favouriteList,busstopId)){
-      this.busIdList.push(busId);
+    var checkIndex=this.favListHaskeyword(this.favouriteList,busstopId);
+    if(checkIndex==-1){
+      var favBusIdList=[];
+      favBusIdList.push(busId);
       this.favouriteList.push({
         busstopId:busstopId,
-        busIdlist:this.busIdList
+        busIdlist:favBusIdList
       });
       this.storage.set("favlist",this.favouriteList);
-      alert("add new stop and bus: "+ this.favouriteList[0].toString());
+      this.savedToast();
     }else{
-      var index=this.busListHasId(this.favouriteList,busstopId,busId);
-      if(index>=0){
-          alert("exist.....");
-          alert("existing: "+ this.favouriteList.toString());
+      var index=this.checkBusIdExist(this.favouriteList[checkIndex].busIdlist,busId)
+      if(index==-1){
+        this.favouriteList[checkIndex].busIdlist.push(busId);
+        this.storage.set("favlist",this.favouriteList);
+        this.savedToast();
       }else{
-          var templist = this.favouriteList[index].busIdlist;
-          alert(templist.toString());
-          templist.push(busId);
-          alert(templist.toString());
-          alert("add new bus: "+ this.favouriteList.toString());
+        this.existToast();
       }
+   
     }
   }
 
   favListHaskeyword(favlist,keyword){
-    if(!keyword){
-      return false;
+    if(!favlist){
+      this.favouriteList=[];
+      return -1;
     }
     for(var i=0;i<favlist.length;i++){
       if(favlist[i].busstopId==keyword){
-        return true;
+        return i;
       }
     }
-    return false;
+    return -1;
   }
 
-  busListHasId(favlist,busstopId,busId){
-      for(var i=0;i<favlist.length;i++){
-        if(favlist[i].busstopId==busstopId){
-          for(var j=0;j<favlist[i].busIdlist.length;j++){
-            if(favlist[i].busIdlist[j]==busId){
-              return i;
-            }
-          }
-        }
-        return -1;
+  checkBusIdExist(favBusIdList,busId){
+    for(var i=0;i<favBusIdList.length;i++){
+      if(favBusIdList[i]==busId){
+        return i;
       }
+    }
+    return -1;
   }
 
+  async existToast() {
+    const toast = await this.toastController.create({
+      message: 'Bus service already added.',
+      duration: 2000
+    });
+    toast.present();
+  }
+
+  
+  async savedToast() {
+    const toast = await this.toastController.create({
+      message: 'Bus service added sucessful.',
+      duration: 2000,
+      buttons: [
+        {
+          side: 'end',
+          icon: 'star',
+          text: 'Favorite',
+        }]
+    });
+    toast.present();
+  }
 
 
 }
