@@ -15,6 +15,8 @@ app.get('/:sid(\\d+)',              busCtrl.getBusStopById);
 app.get('/:sid(\\d+)/:bid(\\d+)',   busCtrl.getBusById);
 app.get('/nearby',                  busCtrl.getNearbyBusStops);
 app.post('/favourite',              busCtrl.getFavouriteBusStops);
+app.get('/busservices',             busCtrl.getAllBusServices);
+app.get('/busroutes',               busCtrl.getAllBusRoutes)
 
 
 app.use(function(req,res){

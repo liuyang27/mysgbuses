@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { FavouritemodalPage } from './favouritemodal.page';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 const routes: Routes = [
   {
@@ -16,6 +17,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
+    MatExpansionModule,
     CommonModule,
     FormsModule,
     IonicModule,

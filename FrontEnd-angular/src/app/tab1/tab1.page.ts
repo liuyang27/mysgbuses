@@ -50,9 +50,6 @@ export class Tab1Page implements OnInit{
       data => {
         this.busesList=data["Services"];
         this.busStopId=data["BusStopCode"];
-        //console.log(data);
-        //console.log("ID: "+this.busStopId);
-
       });
   }
 
@@ -86,10 +83,9 @@ export class Tab1Page implements OnInit{
   createModal() {
     this.modalController.create({
       component: FavouritemodalPage,
-            // componentProps: {
-            //   'firstName': 'Douglas',
-            //   'lastName': 'Adams',
-            //   'middleInitial': 'N'}
+      componentProps: {
+        'favlist': this.favouriteList,
+      }
     }).then(modal => {
       modal.present();
       this.currentModal = modal;

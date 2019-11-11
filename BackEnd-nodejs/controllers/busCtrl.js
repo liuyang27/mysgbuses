@@ -167,8 +167,61 @@ function swap(arrlist, first_Index, second_Index){
     arrlist[second_Index] = temp;
 }
 
-exports.getFavouriteBusStops = function(req,res){
-    console.log("this is funtion: getFavouriteBusStops");
+
+exports.getFavouriteBusStops = function(req,res){ 
+    //console.log("this is funtion: getFavouriteBus");
+    var numOfRes=0;
+    var busStopList=[];
+    var favuoritebusStopList=[];
+    var form = new formidable.IncomingForm();
+    form.parse(req, function(err, fields, files) {
+        var index=0;
+        if(fields.busstopList.length<=0){
+            res.json({"results":"Favourite list is empty"});
+            return;
+        }
+
+        (function getdata(count){
+            request({
+                url: "http://datamall2.mytransport.sg/ltaodataservice/BusStops?$skip="+count*500,
+                method: "GET",
+                json: true,
+                headers: {
+                    "Accept":"application/json",
+                    "AccountKey":accountkey,
+                    "Content-Type": "application/json;charset=UTF-8",
+                    "content-language": "en-US"
+                }         
+            }, function(error, response, body) {
+                if (!error && response.statusCode == 200) {  
+                    numOfRes=body["value"].length;
+                    busStopList=busStopList.concat(body["value"])
+                    count++;
+                    if(numOfRes==500){
+                        getdata(count);
+                    }
+                    else{
+                        for(var i=0;i<busStopList.length;i++){
+                            if(fields.busstopList.includes(busStopList[i]["BusStopCode"])){
+                                favuoritebusStopList.push(busStopList[i]);
+                                //console.log(busStopList[i]);
+                            }
+                        }
+                        return res.json({"results":favuoritebusStopList});
+                    }
+                    
+                }
+            });
+        })(0);
+    });
+}
+
+
+
+
+
+exports.getFavouriteBus = function(req,res){
+    console.log("this is funtion: getFavouriteBus");
     var data=[];
     var form = new formidable.IncomingForm();
     form.parse(req, function(err, fields, files) {
@@ -202,8 +255,76 @@ exports.getFavouriteBusStops = function(req,res){
                 });
             })(fields.busstopList[0]);
     });
+}
 
 
 
+exports.getAllBusServices = function(req,res){ 
+    console.log("this is funtion: getAllBusServices");
+    var numOfRes=0;
+    var busServicesList=[];
+    (function getdata(count){
+        request({
+            url: "http://datamall2.mytransport.sg/ltaodataservice/BusServices?$skip="+count*500,
+            method: "GET",
+            json: true,
+            headers: {
+                "Accept":"application/json",
+                "AccountKey":accountkey,
+                "Content-Type": "application/json;charset=UTF-8",
+                "content-language": "en-US"
+            }         
+        }, function(error, response, body) {
+            if (!error && response.statusCode == 200) {  
+                numOfRes=body["value"].length;
+                busServicesList=busServicesList.concat(body["value"])
+                count++;
+                if(numOfRes==500){
+                    getdata(count);
+                }
+                else{
+                    for(var i=0;i<busServicesList.length;i++){
+                        if(busServicesList[i]["Direction"]==2){
+                            busServicesList.splice(i,1);
+                        }
+                    }
+                    return res.json(busServicesList);
+                }
+            }
+        });
+    })(0);
+}
 
+
+
+exports.getAllBusRoutes = function(req,res){ 
+    console.log("this is funtion: getAllBusRoutes");
+    var numOfRes=0;
+    var busRoutesList=[];
+    (function getdata(count){
+        request({
+            url: "http://datamall2.mytransport.sg/ltaodataservice/BusRoutes?$skip="+count*500,
+            method: "GET",
+            json: true,
+            headers: {
+                "Accept":"application/json",
+                "AccountKey":accountkey,
+                "Content-Type": "application/json;charset=UTF-8",
+                "content-language": "en-US"
+            }         
+        }, function(error, response, body) {
+            if (!error && response.statusCode == 200) {  
+                numOfRes=body["value"].length;
+                busRoutesList=busRoutesList.concat(body["value"])
+                count++;
+                if(numOfRes==500){
+                    getdata(count);
+                }
+                else{
+       
+                    return res.json(busRoutesList);
+                }
+            }
+        });
+    })(0);
 }

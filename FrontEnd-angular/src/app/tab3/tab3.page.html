@@ -1,12 +1,17 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      Bus Service No.
+      Bus Service No.{{searchdate}}
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-    <ion-searchbar></ion-searchbar>
-    
+    <ion-searchbar #searchbar (ionChange)="searchbus()"></ion-searchbar>
+    <ion-list *ngIf="allbuses">
+      <ion-item *ngFor="let bus of allbuses">
+        <ion-label (click)="showBusRoutes(bus.ServiceNo)">{{bus.ServiceNo}} </ion-label>
+      </ion-item>
+ 
+    </ion-list>
 </ion-content>
