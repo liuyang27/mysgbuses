@@ -1,0 +1,8 @@
+{
+  "appId": "com.mysgbuses.www",
+  "appName": "mysgbuses",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "mysgbuses",
+  "cordova": {}
+}

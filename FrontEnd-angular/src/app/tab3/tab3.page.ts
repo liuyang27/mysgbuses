@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab3',
@@ -13,7 +13,8 @@ export class Tab3Page implements OnInit{
   searchdata:any;
   
 
-  constructor(private _http:HttpClient) {}
+  constructor(private _http:HttpClient,
+              public toastController: ToastController) {}
 
 
   @ViewChild('searchbar',{static: false}) searchbar:any;
@@ -41,10 +42,16 @@ export class Tab3Page implements OnInit{
   }
 
   showBusRoutes(id){
-    //console.log(id)
+    this.msgToast(id);
   }
 
-
+  async msgToast(id) {
+    const toast = await this.toastController.create({
+      message: 'Too lazy to check bus '+id,
+      duration: 2000
+    });
+    toast.present();
+  }
 
 
 }

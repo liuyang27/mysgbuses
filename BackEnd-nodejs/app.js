@@ -8,16 +8,15 @@ var busCtrl = require('./controllers/busCtrl.js')
 
 app.use(cors());
 
-// app.get('/',                        busCtrl.getAllBusStops);
+
 app.get('/',                        busCtrl.getNearbyBusStops);
-app.get('/test',                    busCtrl.testDistance);
 app.get('/:sid(\\d+)',              busCtrl.getBusStopById);
 app.get('/:sid(\\d+)/:bid(\\d+)',   busCtrl.getBusById);
 app.get('/nearby',                  busCtrl.getNearbyBusStops);
 app.post('/favourite',              busCtrl.getFavouriteBusStops);
 app.get('/busservices',             busCtrl.getAllBusServices);
 app.get('/busroutes',               busCtrl.getAllBusRoutes)
-
+app.get('/busstops',                busCtrl.getAllBusStops);
 
 app.use(function(req,res){
     res.send("404 page not found..");

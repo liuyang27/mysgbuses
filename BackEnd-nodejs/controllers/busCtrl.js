@@ -90,11 +90,7 @@ exports.getBusById = function(req,res){
 }
 
 
-exports.testDistance = function(req,res){
-    console.log("testing...");
-    getDistance(1.29684825487647,103.85253591654006);
-    res.json({"result":"ok"});
-}
+
 
 
 
@@ -109,10 +105,14 @@ function getDistance(lat1,lon1,lat2,lon2){
 } 
 
 
-exports.getNearbyBusStops = function(req,res){ 
+exports.getNearbyBusStops = function(req,res){
+    //console.log(req.query);
     var numOfRes=0;
     var busStopList=[];
     var distancelist=[];
+    var latitude=req.query.latitude;
+    var longitude=req.query.longitude;
+
     (function getdata(count){
         request({
             url: "http://datamall2.mytransport.sg/ltaodataservice/BusStops?$skip="+count*500,
@@ -136,7 +136,7 @@ exports.getNearbyBusStops = function(req,res){
                     for(var i=0;i<busStopList.length;i++){
                         var lat2=busStopList[i]["Latitude"];
                         var lon2=busStopList[i]["Longitude"];
-                        var dis = getDistance(1.298778,103.788748,lat2,lon2);
+                        var dis = getDistance(latitude,longitude,lat2,lon2);
                         distancelist.push(parseFloat(dis))
                     }
                     bubble_Sort(distancelist,busStopList);

@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient,HttpParams } from '@angular/common/http';
 import { ModalController } from '@ionic/angular';
 import { FavouritemodalPage } from '../favouritemodal/favouritemodal.page';
 import { StorageService } from '../services/storage.service';
 import { ToastController } from '@ionic/angular';
+import { Plugins } from '@capacitor/core';
+const { Geolocation } = Plugins;
 
 @Component({
   selector: 'app-tab1',
@@ -23,25 +25,25 @@ export class Tab1Page implements OnInit{
   busStopId:any;
   currentModal:any=null;
   favouriteList:any[]=[];
-  
-
+  latitude:any;
+  longitude:any;
+ 
 
 
   ngOnInit(): void {
     this.favouriteList=this.storage.get("favlist");
-    //console.log( this.favouriteList);
-    this._http.get("http://localhost:3000").subscribe(
-      data => this.bussStopList=data);
+    this.getNearBusstops();
+
   }
 
-  doRefresh(event) {
-    console.log('Begin async operation');
- 
-    
-    setTimeout(() => {
-      console.log('Async operation has ended');
-      event.target.complete();
-    }, 2000);
+  async doRefresh(event) {
+    //console.log('Begin async operation');
+    await this.getCurrentPosition();
+    event.target.complete();
+    // setTimeout(() => {
+    //   console.log('Async operation has ended');
+    //   event.target.complete();
+    // }, 2000);
   }
 
   getBusInfo(BusStopCode){
@@ -160,6 +162,22 @@ export class Tab1Page implements OnInit{
     });
     toast.present();
   }
+
+
+  async getCurrentPosition() {
+    const coordinates = await Geolocation.getCurrentPosition();
+    this.latitude=coordinates.coords["latitude"];
+    this.longitude=coordinates.coords["longitude"];
+  }
+
+  async getNearBusstops() {
+    await this.getCurrentPosition();
+    const params = new HttpParams().set("latitude", this.latitude).set("longitude", this.longitude);
+    this._http.get("http://localhost:3000",{params:params}).subscribe(
+      data => this.bussStopList=data);
+  }
+  
+   
 
 
 }
