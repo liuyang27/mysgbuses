@@ -3,6 +3,7 @@ import { ModalController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from '../services/storage.service';
 import { ToastController } from '@ionic/angular';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-favouritemodal',
@@ -18,7 +19,8 @@ export class FavouritemodalPage implements OnInit {
   constructor(public modalController: ModalController,
               private _http:HttpClient,
               public storage:StorageService,
-              public toastController: ToastController) { }
+              public toastController: ToastController,
+              public loadingController: LoadingController) { }
 
   favouriteList:any[]=[];
   busStopId:any;
@@ -27,24 +29,34 @@ export class FavouritemodalPage implements OnInit {
 
   ngOnInit() {
     //this.favouriteList=this.storage.get("favlist");
+  
     this.favouriteList=this.favlist;
     var busstopList=[];
-
-    if(this.favouriteList){
-
+    if(this.favouriteList.length>0){
+      this.presentLoadingWithOptions();
       this.favouriteList.forEach(element => { busstopList.push(element.busstopId) });
-
       this._http.post("http://localhost:3000/favourite",{"busstopList":busstopList}).subscribe(
         data => {
           this.bussStopList=data["results"];
         });
-        
+    }else{
+      this.emptyToast();
     }
     
   }
 
-  getBusInfo(BusStopCode){
+  async presentLoadingWithOptions() {
+    const loading = await this.loadingController.create({
+      spinner: "circles",
+      duration: 2000,
+      message: 'Please wait...',
+      translucent: true,
+      cssClass: 'custom-class custom-loading'
+    });
+    return await loading.present();
+  }
 
+  getBusInfo(BusStopCode){
     this._http.get("http://localhost:3000/"+BusStopCode).subscribe(
       data => {
         this.busesList=[];
@@ -63,7 +75,7 @@ export class FavouritemodalPage implements OnInit {
 
           }
         }
-        console.log(this.busesList);
+        // console.log(this.busesList);
       });
   }
 
@@ -137,6 +149,18 @@ export class FavouritemodalPage implements OnInit {
     const toast = await this.toastController.create({
       message: 'Removed sucessful.',
       duration: 2000
+    });
+    toast.present();
+  }
+
+  async emptyToast() {
+    const toast = await this.toastController.create({
+      header:"Empty list",
+      message: 'go back to add your favourite bus now~',
+      duration: 2000,
+      position:"middle",
+      translucent:true,
+  
     });
     toast.present();
   }

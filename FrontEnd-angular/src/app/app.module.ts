@@ -14,6 +14,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FavouritemodalPageModule } from './favouritemodal/favouritemodal.module';
 
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -23,7 +24,7 @@ import { FavouritemodalPageModule } from './favouritemodal/favouritemodal.module
     BrowserModule, 
     IonicModule.forRoot(), 
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
   ],
   providers: [
     StatusBar,

@@ -113,6 +113,10 @@ exports.getNearbyBusStops = function(req,res){
     var latitude=req.query.latitude;
     var longitude=req.query.longitude;
 
+    if(!latitude || !longitude){
+        return res.json("Cannot get coordinates,please enable GPS");
+    }
+
     (function getdata(count){
         request({
             url: "http://datamall2.mytransport.sg/ltaodataservice/BusStops?$skip="+count*500,

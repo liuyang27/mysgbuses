@@ -14,6 +14,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
     CommonModule,
     FormsModule,
     RouterModule.forChild([{ path: '', component: Tab1Page }])
+
   ],
   declarations: [Tab1Page]
 })

@@ -10,7 +10,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'myFavourites',
     component: FavouritemodalPage
   }
 ];
