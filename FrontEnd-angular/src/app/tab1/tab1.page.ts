@@ -173,7 +173,7 @@ export class Tab1Page implements OnInit{
   async getNearBusstops() {
     await this.getCurrentPosition();
     const params = new HttpParams().set("latitude", this.latitude).set("longitude", this.longitude);
-    this._http.get("http://localhost:3000",{params:params}).subscribe(
+    this._http.get("http://localhost:3000/home",{params:params}).subscribe(
       data => this.bussStopList=data);
   }
   

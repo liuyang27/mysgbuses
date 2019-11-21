@@ -8,8 +8,10 @@ var busCtrl = require('./controllers/busCtrl.js')
 
 app.use(cors());
 
+//combined angular front-end built product
+//app.use(express.static("www"))
 
-app.get('/',                        busCtrl.getNearbyBusStops);
+app.get('/home',                    busCtrl.getNearbyBusStops);
 app.get('/:sid(\\d+)',              busCtrl.getBusStopById);
 app.get('/:sid(\\d+)/:bid(\\d+)',   busCtrl.getBusById);
 app.get('/nearby',                  busCtrl.getNearbyBusStops);

@@ -32,7 +32,7 @@ export class FavouritemodalPage implements OnInit {
   
     this.favouriteList=this.favlist;
     var busstopList=[];
-    if(this.favouriteList.length>0){
+    if(this.favouriteList && this.favouriteList.length>0){
       this.presentLoadingWithOptions();
       this.favouriteList.forEach(element => { busstopList.push(element.busstopId) });
       this._http.post("http://localhost:3000/favourite",{"busstopList":busstopList}).subscribe(
